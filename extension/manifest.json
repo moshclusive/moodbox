@@ -1,0 +1,74 @@
+{
+  "action": {
+    "default_icon": {
+      "128": "logo.png",
+      "16": "logo.png",
+      "32": "logo.png",
+      "48": "logo.png"
+    },
+    "default_title": "MoodBox"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "all_frames": true,
+      "js": [
+        "content.js"
+      ],
+      "match_about_blank": true,
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
+  },
+  "description": "Fast single-click Download Image, WOFF2-to-TTF Font Download, and MoodBox project capture with design vocabulary Note Picker.",
+  "host_permissions": [
+    "http://127.0.0.1:57684/*",
+    "http://localhost:57684/*",
+    "http://*/*",
+    "https://*/*"
+  ],
+  "icons": {
+    "128": "logo.png",
+    "16": "logo.png",
+    "32": "logo.png",
+    "48": "logo.png"
+  },
+  "manifest_version": 3,
+  "name": "MoodBox",
+  "options_page": "options.html",
+  "permissions": [
+    "activeTab",
+    "contextMenus",
+    "downloads",
+    "scripting",
+    "storage",
+    "tabs",
+    "system.display",
+    "webNavigation",
+    "unlimitedStorage"
+  ],
+  "version": "9.3.0",
+  "web_accessible_resources": [
+    {
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ],
+      "resources": [
+        "logo.png",
+        "moodbox.png",
+        "download.png",
+        "fontdownload.png",
+        "wawoff2.js"
+      ]
+    }
+  ]
+}

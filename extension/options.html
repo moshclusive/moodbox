@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0b0d10">
+  <title>MoodBox Library</title>
+  <link rel="icon" type="image/png" href="logo.png?v=860">
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <header class="topbar">
+    <button id="sidebarToggle" class="menu-button" type="button" title="Toggle library folders" aria-label="Toggle library folders" aria-expanded="true">
+      <span></span><span></span><span></span>
+    </button>
+
+    <label class="search">
+      <span class="search-icon" aria-hidden="true"></span>
+      <input id="librarySearch" type="search" placeholder="Search filename, format, source or folder…" autocomplete="off">
+      <kbd>/</kbd>
+    </label>
+
+    <div class="toolbar-actions">
+      <button id="moreActions" class="more-button" type="button" title="More actions" aria-label="More actions" aria-expanded="false">•••</button>
+      <div id="viewMenu" class="popover-menu" hidden>
+        <button id="moveView" type="button">Move items</button>
+        <button id="deleteView" class="danger-action" type="button">Clear library</button>
+      </div>
+      <div class="download-wrap">
+        <button id="downloadView" class="download-button" type="button">
+          <span aria-hidden="true">↓</span><b id="downloadLabel">Download all</b><small id="downloadCount">0</small>
+        </button>
+        <button id="downloadOptions" class="download-options-button" type="button" title="Download options" aria-label="Download options" aria-expanded="false">⌄</button>
+        <div id="downloadMenu" class="popover-menu download-menu" hidden>
+          <button id="downloadAllOption" type="button">All Images</button>
+          <button id="createMoodboardOption" type="button">Create Moodboard</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div id="appShell" class="app-shell">
+    <aside id="sidebar" class="sidebar">
+      <button id="newFolder" class="new-folder-action" type="button"><span>＋</span><strong>New folder</strong></button>
+      <div class="sidebar-head"><strong>Library</strong><button id="refreshLibrary" type="button" title="Refresh library" aria-label="Refresh library">↻</button></div>
+      <nav id="folderNav" class="folder-nav"></nav>
+    </aside>
+
+    <main class="main-panel">
+      <div id="libraryMessage" class="message" role="status" aria-live="polite"></div>
+      <section id="libraryGrid" class="library-grid"></section>
+    </main>
+  </div>
+
+  <div id="folderContextMenu" class="context-menu" role="menu" hidden>
+    <button id="contextRename" type="button" role="menuitem">Rename</button>
+    <button id="contextDelete" class="danger-action" type="button" role="menuitem">Delete folder</button>
+  </div>
+
+  <dialog id="folderDialog" class="dialog">
+    <form method="dialog" id="folderForm">
+      <div class="dialog-head"><strong id="folderDialogTitle">Create folder</strong><button value="cancel" aria-label="Close">×</button></div>
+      <label id="folderNameField">Folder name<input id="folderName" maxlength="80" autocomplete="off" placeholder="Nature"></label>
+      <label id="moveFolderField" hidden>Destination folder<select id="moveFolderSelect"></select></label>
+      <div class="dialog-actions"><button value="cancel">Cancel</button><button id="saveFolder" class="primary" value="default">Save folder</button></div>
+    </form>
+  </dialog>
+
+  <template id="libraryCardTemplate">
+    <article class="library-card">
+      <div class="asset-preview"><img alt=""><div class="font-preview"><strong>Aa</strong><span>MoodBox 123</span></div><div class="file-preview"><strong>FILE</strong><span>Saved asset</span></div></div>
+      <div class="asset-meta"><div class="asset-name"></div><div class="asset-facts"></div><div class="asset-source"></div></div>
+      <button class="remove-item" type="button" title="Remove saved item" aria-label="Remove saved item">×</button>
+    </article>
+  </template>
+
+  <script src="library.js"></script>
+  <script src="options.js"></script>
+</body>
+</html>

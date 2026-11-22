@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0b0d10">
+  <title>MoodBox Asset Board</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="logo.png?v=860">
+  <link rel="shortcut icon" type="image/png" href="logo.png?v=860">
+  <link rel="stylesheet" href="batch.css">
+</head>
+<body>
+  <header class="toolbar">
+    <button id="filterToggle" class="icon-button filter-button" type="button" aria-expanded="false" aria-controls="filterDrawer" title="Filters" aria-label="Open filters"><i></i><i></i><i></i></button>
+
+    <label class="toolbar-search" aria-label="Search assets">
+      <span class="search-glyph" aria-hidden="true"></span>
+      <input id="search" type="search" placeholder="Search filename, format, font family or URL…" autocomplete="off">
+      <kbd>/</kbd>
+    </label>
+
+    <div class="quick-filters">
+      <div class="menu-select" data-menu="type">
+        <button id="typeButton" class="menu-button" type="button" aria-expanded="false"><span class="menu-kicker">Type</span><b>Any type</b><small>0</small><i></i></button>
+        <div id="typeMenu" class="menu-popover" hidden></div>
+      </div>
+      <div class="menu-select" data-menu="layout">
+        <button id="layoutButton" class="menu-button" type="button" aria-expanded="false"><span class="menu-kicker">Layout</span><b>Any layout</b><small>0</small><i></i></button>
+        <div id="layoutMenu" class="menu-popover" hidden></div>
+      </div>
+      <label class="output-control download-format-control" title="Convert selected assets during download">
+        <span>Download format</span>
+        <select id="downloadFormat" aria-label="Download format">
+          <option value="original">Original</option>
+          <option value="jpg">JPG</option>
+          <option value="png">PNG</option>
+          <option value="ttf">TTF (verified)</option>
+        </select>
+      </label>
+    </div>
+
+    <button id="selectAll" class="select-all" type="button">Select all</button>
+    <span id="selectedCount" class="selected-count" aria-live="polite">0 selected</span>
+    <button id="clearSelectedTop" class="clear-selected" type="button" disabled>Clear</button>
+    <button id="saveSelected" class="save-action" type="button" title="Save to Moodbox Library" aria-label="Save to Moodbox Library" disabled><span class="folder-glyph" aria-hidden="true"></span><b>Save</b></button>
+    <button id="openLibrary" class="library-action" type="button" title="Open MoodBox Library" aria-label="Open MoodBox Library"><span aria-hidden="true">▦</span></button>
+    <button id="downloadSelected" class="download-action" type="button" title="Download selected originals" aria-label="Download selected originals" disabled><span class="download-stack" aria-hidden="true"><i></i><b>↓</b></span></button>
+    <span id="message" class="toolbar-message" role="status" aria-live="polite"></span>
+  </header>
+
+  <div id="drawerHotspot" class="drawer-hotspot" aria-hidden="true"></div>
+  <div id="drawerScrim" class="drawer-scrim" hidden></div>
+  <aside id="filterDrawer" class="filter-drawer" aria-hidden="true" aria-label="Asset filters">
+    <div class="drawer-head"><div><strong>Refine assets</strong><small>Filter without changing the original scan order</small></div><button id="drawerClose" type="button" aria-label="Close filters">×</button></div>
+
+    <section class="filter-section size-section">
+      <div class="section-title"><span class="section-symbol size-symbol">↔</span><div><strong>Image size range</strong><small>Longest pixel edge</small></div></div>
+      <div class="range-readout"><b id="sizeReadout">Full range</b><small id="sizeKnown">Known image sizes</small></div>
+      <div id="rangeTrack" class="dual-range">
+        <div class="range-base"></div><div class="range-fill"></div>
+        <input id="sizeMin" type="range" min="0" max="4000" value="0" step="50" aria-label="Minimum image size">
+        <input id="sizeMax" type="range" min="0" max="4000" value="4000" step="50" aria-label="Maximum image size">
+      </div>
+      <div class="range-labels"><span>Minimum</span><span>Maximum</span></div>
+    </section>
+
+    <section class="filter-section sort-section">
+      <div class="section-title"><span class="section-symbol sort-symbol">⇅</span><div><strong>Sort order</strong><small>Page order is the default</small></div></div>
+      <select id="sortSelect">
+        <option value="page" selected>Page order</option>
+        <option value="smart">Smart relevance</option>
+        <option value="largest">Largest first</option>
+        <option value="name">Filename A–Z</option>
+        <option value="type">Asset type</option>
+      </select>
+    </section>
+
+    <section class="filter-section intelligence-section">
+      <div class="section-title"><span class="section-symbol intelligence-symbol">✦</span><div><strong>Asset intelligence</strong><small>Group variants and move interface noise to the end</small></div></div>
+      <label class="smart-toggle"><span><b>Consolidate duplicate variants</b><small>Keep one card for responsive sizes</small></span><input id="groupDuplicates" type="checkbox" checked><i></i></label>
+      <label class="smart-toggle"><span><b>Visual duplicate detection</b><small>Match visually identical images even when URLs and filenames differ</small></span><input id="visualDuplicates" type="checkbox" checked><i></i></label>
+      <label class="smart-toggle"><span><b>Group alternate formats</b><small>Show JPG, PNG, WEBP and font formats together</small></span><input id="groupFormats" type="checkbox" checked><i></i></label>
+      <label class="smart-toggle"><span><b>Hide tiny and tracking assets</b><small>Remove pixels, bullets and micro-controls</small></span><input id="hideNoise" type="checkbox" checked><i></i></label>
+      <label class="smart-toggle"><span><b>Move interface graphics to the end</b><small>Preserve content order while delaying logos and icons</small></span><input id="deprioritizeUi" type="checkbox" checked><i></i></label>
+    </section>
+
+    <div class="drawer-footer"><button id="resetFilters" type="button">Reset filters</button><button id="clearSelection" type="button">Clear selection</button></div>
+  </aside>
+
+  <main id="gallery" class="asset-grid" aria-live="polite"></main>
+
+  <div id="hoverPreview" class="hover-preview" hidden aria-hidden="true">
+    <div class="hover-canvas"><img id="hoverImage" alt=""><div id="hoverFont" class="hover-font">AaBb<br><small>123</small></div><div id="hoverFile" class="hover-file"><strong>FILE</strong><span>Web asset</span></div><span id="hoverFallback">Preview unavailable</span></div>
+    <div class="hover-meta"><span id="hoverTitle"></span><small id="hoverFacts"></small></div>
+  </div>
+
+  <dialog id="folderDialog" class="folder-dialog">
+    <form method="dialog" id="folderForm">
+      <div class="folder-dialog-head"><strong>Save to folder</strong><button value="cancel" aria-label="Close">×</button></div>
+      <div id="folderChoices" class="folder-choices"></div>
+      <label class="new-folder-field"><span>New folder</span><div><input id="newFolderName" maxlength="80" placeholder="Nature"><button id="createAndSave" type="button">Create & save</button></div></label>
+      <div class="folder-dialog-foot"><span id="folderDialogStatus"></span><button value="cancel">Cancel</button></div>
+    </form>
+  </dialog>
+
+  <template id="cardTemplate">
+    <article class="card" tabindex="0" role="button" aria-pressed="false">
+      <span class="selection-mark" aria-hidden="true">✓</span>
+      <div class="preview-wrap"><img loading="lazy" alt=""><video class="video-frame" muted playsinline preload="metadata"></video><button class="frame-capture" type="button" title="Capture video frame as PNG" aria-label="Capture video frame as PNG">▣</button><div class="font-preview"><strong>AaBb</strong><span>123</span></div><div class="file-preview"><strong>FILE</strong><span>Web asset</span></div><span class="preview-fallback">Preview unavailable</span></div>
+      <div class="meta">
+        <div class="filename"></div>
+        <div class="facts"><span class="dimensions"></span><span class="filesize"></span></div>
+        <div class="variant-row" aria-label="Available formats"></div>
+      </div>
+    </article>
+  </template>
+  <script src="library.js"></script>
+  <script src="batch.js"></script>
+</body>
+</html>
